@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  api:
+    image: api/just-timeline
+    restart: always
+    build: .
+    working_dir: /var/www/timeline
+    ports:
+      - 8080:8080
+      - 5005:5005
+    entrypoint: [ "java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005","-jar","/app.jar" ]
+    depends_on:
+      - db
+  db:
+    image: postgres:17.5
+    restart: always
+    environment:
+      POSTGRES_USER: useradmin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: timeline
+    ports:
+      - 5434:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  n8n_data:
+  postgres-data:
+    driver: local
