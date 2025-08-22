@@ -1,6 +1,5 @@
 package com.just.timeline.entity;
 
-import com.just.timeline.dto.request.CreateTimelineRequestDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -38,14 +37,5 @@ public class TimelineEntity {
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public TimelineEntity(CreateTimelineRequestDTO createTimelineRequestDTO){
-        this.title = createTimelineRequestDTO.getTitle();
-
-        this.events = createTimelineRequestDTO.getEvents()
-                .stream()
-                .map(TimelineEventEntity::new)
-                .toList();
     }
 }
