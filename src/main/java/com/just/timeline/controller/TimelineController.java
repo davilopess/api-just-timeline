@@ -25,7 +25,7 @@ public class TimelineController {
                     content = @Content(schema = @Schema(implementation = TimelineResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data",
                     content = @Content(schema = @Schema())),
-            @ApiResponse(responseCode = "424", description = "Failed to fetch additional information.",
+            @ApiResponse(responseCode = "424", description = "Failed to generate timeline N8N.",
                     content = @Content(schema = @Schema())),
             @ApiResponse(responseCode = "500", description = "An unexpected error occurred.",
                     content = @Content(schema = @Schema()))

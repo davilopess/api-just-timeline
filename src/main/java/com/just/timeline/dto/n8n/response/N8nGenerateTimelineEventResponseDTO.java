@@ -15,6 +15,6 @@ public class N8nGenerateTimelineEventResponseDTO {
     private String title;
     private String resume;
     private LocalDate eventDate;
-    private List<GenerateTimelineEventSourceExternalResponseDTO> sources;
+    private List<N8nGenerateTimelineEventSourceResponseDTO> sources;
 
 }

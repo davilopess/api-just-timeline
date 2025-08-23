@@ -2,6 +2,7 @@ package com.just.timeline.exception.handler;
 
 import com.just.timeline.exception.N8nTimelineIntegrationException;
 import com.just.timeline.exception.model.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class RestExceptionHandler {
 
     @ExceptionHandler(N8nTimelineIntegrationException.class)
-    public ResponseEntity<ErrorResponse> additionalInfoIntegrationException(RuntimeException ex) {
+    public ResponseEntity<ErrorResponse> n8nTimelineIntegrationExceptionException(RuntimeException ex) {
         ErrorResponse errorResponse = ErrorResponse
                 .builder()
                 .timestamp(LocalDateTime.now())
@@ -29,6 +31,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> genericException(Exception ex) {
+        log.error("Exception", ex);
         ErrorResponse errorResponse = ErrorResponse
                 .builder()
                 .timestamp(LocalDateTime.now())
@@ -41,6 +44,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> illegalArgumentException(IllegalArgumentException ex) {
+        log.error("Illegal Argument", ex);
         ErrorResponse errorResponse = ErrorResponse
                 .builder()
                 .timestamp(LocalDateTime.now())

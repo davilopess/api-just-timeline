@@ -22,6 +22,21 @@ services:
       - 5434:5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    environment:
+      - N8N_HOST=n8n.localhost:5678
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://localhost:5678/
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: unless-stopped
 volumes:
   n8n_data:
   postgres-data:
