@@ -1,6 +1,7 @@
 package com.just.timeline.exception.handler;
 
 import com.just.timeline.exception.N8nTimelineIntegrationException;
+import com.just.timeline.exception.TimelineNotFoundException;
 import com.just.timeline.exception.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,18 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.FAILED_DEPENDENCY);
     }
 
+    @ExceptionHandler(TimelineNotFoundException.class)
+    public ResponseEntity<ErrorResponse> TimelineNotFoundException (RuntimeException ex) {
+        log.warn("Timeline not found: {}", ex.getMessage());
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .code(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.NOT_FOUND.name())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> genericException(Exception ex) {
