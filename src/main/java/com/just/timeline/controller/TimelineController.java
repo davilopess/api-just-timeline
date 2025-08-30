@@ -2,7 +2,6 @@ package com.just.timeline.controller;
 
 import com.just.timeline.dto.timeline.request.TimelineRequestDTO;
 import com.just.timeline.dto.timeline.response.TimelineResponseDTO;
-import com.just.timeline.dto.timeline.TimelineDTO;
 import com.just.timeline.service.TimelineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +29,7 @@ public class TimelineController {
                             content = {
                                     @Content(
                                             mediaType = "application/json",
-                                            array = @ArraySchema(schema = @Schema(implementation = TimelineDTO.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = TimelineResponseDTO.class))
                                     )
                             }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -39,7 +38,7 @@ public class TimelineController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    public List<TimelineDTO> getTimelines(@RequestParam(required = false) String title){
+    public List<TimelineResponseDTO> getTimelines(@RequestParam(required = false) String title){
         return timelineService.findTimelines(title);
     }
 
@@ -50,7 +49,7 @@ public class TimelineController {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = {
                                     @Content(
-                                            schema = @Schema(implementation = TimelineDTO.class)
+                                            schema = @Schema(implementation = TimelineResponseDTO.class)
                                     )
                             }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -59,7 +58,7 @@ public class TimelineController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    public TimelineDTO getTimelineId(@PathVariable Long id){
+    public TimelineResponseDTO getTimelineId(@PathVariable Long id){
         return timelineService.findById(id);
     }
 

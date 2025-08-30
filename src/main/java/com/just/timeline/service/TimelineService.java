@@ -3,13 +3,11 @@ package com.just.timeline.service;
 import com.just.timeline.dto.n8n.response.N8nGenerateTimelineResponseDTO;
 import com.just.timeline.dto.timeline.request.TimelineRequestDTO;
 import com.just.timeline.dto.timeline.response.TimelineResponseDTO;
-import com.just.timeline.dto.timeline.TimelineDTO;
 import com.just.timeline.entity.TimelineEntity;
 import com.just.timeline.integrator.N8nTimelineApiIntegrator;
 import com.just.timeline.mapper.TimelineMapper;
 import com.just.timeline.repository.TimelineRepository;
 import com.just.timeline.exception.TimelineNotFoundException;
-import com.just.timeline.repository.specification.TimelineSpecifications;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,19 +30,17 @@ public class TimelineService {
         return timelineMapper.toDTO(createdTimeline);
     }
 
-    public TimelineDTO findById(Long id) {
+    public TimelineResponseDTO findById(Long id) {
         TimelineEntity timeline = repository.findById(id)
                 .orElseThrow(() -> new TimelineNotFoundException(id));
 
-        return timelineMapper.TimelineToDTO(timeline);
+        return timelineMapper.toDTO(timeline);
     }
 
-    public List<TimelineDTO> findTimelines(String title) {
-        Specification<TimelineEntity> spec = Specification
-                .where(TimelineSpecifications.hasTitle(title));
-
-        return repository.findAll(spec).stream()
-                .map(t -> timelineMapper.TimelineToDTO(t))
+    public List<TimelineResponseDTO> findTimelines(String title) {
+        return repository.findByFilters(title)
+                .stream()
+                .map(timelineMapper::toDTO) // Method reference
                 .collect(Collectors.toList());
     }
 }
