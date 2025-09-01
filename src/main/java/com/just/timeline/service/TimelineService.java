@@ -7,8 +7,15 @@ import com.just.timeline.entity.TimelineEntity;
 import com.just.timeline.integrator.N8nTimelineApiIntegrator;
 import com.just.timeline.mapper.TimelineMapper;
 import com.just.timeline.repository.TimelineRepository;
+import com.just.timeline.exception.TimelineNotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +28,19 @@ public class TimelineService {
         N8nGenerateTimelineResponseDTO n8nTimelineResponse = n8nTimelineApiIntegrator.generateTimeline(createTimelineRequestDTO.description());
         TimelineEntity createdTimeline = repository.save(timelineMapper.toEntity(n8nTimelineResponse));
         return timelineMapper.toDTO(createdTimeline);
+    }
+
+    public TimelineResponseDTO findById(Long id) {
+        TimelineEntity timeline = repository.findById(id)
+                .orElseThrow(() -> new TimelineNotFoundException(id));
+
+        return timelineMapper.toDTO(timeline);
+    }
+
+    public List<TimelineResponseDTO> findTimelines(String title) {
+        return repository.findByFilters(title)
+                .stream()
+                .map(timelineMapper::toDTO) // Method reference
+                .collect(Collectors.toList());
     }
 }
